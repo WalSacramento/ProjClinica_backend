@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { hash } from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -7,6 +8,7 @@ export default {
 
     try {
       const { nome, email, senha, admin } = req.body
+      const hashPassword = await hash(senha, 8)
 
       let user = await prisma.usuario.findUnique({ where: { email } })
       
@@ -18,7 +20,7 @@ export default {
         data: {
           nome,
           email,
-          senha,
+          senha: hashPassword,
           admin
         }
       })
@@ -32,7 +34,7 @@ export default {
   async findAllUsers(req, res) {
     try {
       const users = await prisma.usuario.findMany()
-      return res.json(users)
+      return res.json({users})
 
     } catch (error) {
       return res.json({ error })

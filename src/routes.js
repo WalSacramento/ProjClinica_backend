@@ -4,7 +4,8 @@ import UserController from './controller/UserController'
 import ClinicController from './controller/ClinicController'
 import DoctorController from './controller/DoctorController'
 import ConsultController from './controller/ConsultController'
-// import PostController from './controller/PostController'
+import AuthController from './controller/AuthController'
+import { AuthMiddleware } from './middlewares/auth'
 
 const router = Router()
 
@@ -14,7 +15,7 @@ router.get('/', (req, res) => {
 
 router.route('/user')
   .post(UserController.createUser)
-  .get(UserController.findAllUsers);
+  .get(AuthMiddleware, UserController.findAllUsers);
 
 router.route('/user/:id')
   .get(UserController.findUser)
@@ -47,10 +48,8 @@ router.route('/consult/:id')
 router.route('/consults')
   .get(ConsultController.findAllConsults);
 
-// router.post('/post/user/:id', PostController.createPost)
-// router.get('/posts', PostController.FindAllPosts)
-// router.put('/post/:id', PostController.UpdatePost)
-// router.delete('/post/:id', PostController.DeletePost)
+router.route('/auth')
+  .post(AuthController.authenticate)
 
 
 
