@@ -4,10 +4,10 @@ const prisma = new PrismaClient()
 
 export default {
 
-  async createProfessional(req, res) {
+  async createPatient(req, res) {
     try {
       const { id } = req.params
-      const { nome, cargo } = req.body
+      const { nome, cpf, data_de_nascimento, telefone, sexo } = req.body
 
       const clinic = await prisma.clinica.findUnique({ where: { id: Number(id) } })
 
@@ -15,21 +15,24 @@ export default {
         return res.json({ error: 'Não existe clínica com esse id!' })
       }
 
-      const existingProfessional = await prisma.profissional.findFirst({
+      const existingPatient = await prisma.paciente.findFirst({
         where: {
-          nome,
+          cpf,
           clinicaId: clinic.id
         }
       })
 
-      if (existingProfessional) {
-        return res.json({ error: 'Já existe um profissional com esse nome nesta clínica' })
+      if (existingPatient) {
+        return res.json({ error: 'Já existe um paciente com esse CPF cadastrado nesta clinica!' })
       }
 
-      const professional = await prisma.profissional.create({
+      const patient = await prisma.paciente.create({
         data: {
           nome,
-          cargo,
+          cpf,
+          data_de_nascimento,
+          telefone,
+          sexo,
           clinicaId: clinic.id
         },
         include: {
@@ -37,17 +40,17 @@ export default {
         }
       })
 
-      return res.json(professional)
+      return res.json(patient)
     } catch (error) {
       console.error('Ocorreu um erro:', error)
       return res.json({ error: 'Ocorreu um erro durante o processamento da solicitação' })
     }
   },
 
-  async findAllProfessionals(req, res) {
+  async findAllPatients(req, res) {
     try {
-      const professionals = await prisma.profissional.findMany()
-      return res.json(professionals)
+      const patients = await prisma.profissional.findMany()
+      return res.json(patients)
 
     } catch (error) {
       return res.json({ error })
@@ -55,16 +58,16 @@ export default {
     }
   },
 
-  async findProfessional(req, res) {
+  async findPatient(req, res) {
     try {
       const { id } = req.params
-      const professional = await prisma.profissional.findUnique({
+      const patient = await prisma.paciente.findUnique({
         where: { id: Number(id) }
       })
 
-      if (!professional) return res.json({ error: "Não foram encontrados profissionais com esse ID!" })
+      if (!patient) return res.json({ error: "Não foram encontrados pacientes com esse ID!" })
 
-      return res.json(professional)
+      return res.json(patient)
 
     } catch (error) {
       return res.json({ error })
@@ -72,59 +75,94 @@ export default {
     }
   },
 
-  async findProfessionalForName(req, res) {
+  async findPatientForName(req, res) {
     try {
       const { nome } = req.body;
-      const professionals = await prisma.profissional.findMany({
-        where: { nome: { contains: nome, mode: 'insensitive'} }
+      const patient = await prisma.paciente.findMany({
+        where: { nome: { contains: nome, mode: 'insensitive' } }
       });
 
-      if (professionals.length === 0) {
-        return res.json({ error: 'Não foram encontrados profissionais com esse nome.' });
+      if (patient.length === 0) {
+        return res.json({ error: 'Não foram encontrados pacientes com esse nome.' });
       }
 
-      return res.json(professionals);
+      return res.json(patient);
     } catch (error) {
       return res.json({ error });
     }
   },
 
-  async updateProfessional(req, res) {
+  async findPatientForDateOfBirth(req, res) {
+    try {
+      const { data_de_nascimento } = req.body;
+      const patient = await prisma.paciente.findMany({
+        where: { data_de_nascimento: { contains: data_de_nascimento, mode: 'insensitive' } }
+      });
+
+      if (patient.length === 0) {
+        return res.json({ error: 'Não foram encontrados pacientes com essa data de nascimento.' });
+      }
+
+      return res.json(patient);
+    } catch (error) {
+      return res.json({ error });
+    }
+  },
+
+  async findPatientForCPF(req, res) {
+    try {
+      const { cpf } = req.body;
+      const patient = await prisma.paciente.findMany({
+        where: { cpf: { contains: cpf, mode: 'insensitive' } }
+      });
+
+      if (patient.length === 0) {
+        return res.json({ error: 'Não foram encontrados pacientes com esse CPF.' });
+      }
+
+      return res.json(patient);
+    } catch (error) {
+      return res.json({ error });
+    }
+  },
+
+
+  async updatePatient(req, res) {
     try {
       const { id } = req.params
-      const { nome, cargo, clinicaId } = req.body
+      const { nome, cpf, data_de_nascimento, telefone, sexo } = req.body
 
-      let professional = await prisma.profissional.findUnique({
+      let patient = await prisma.paciente.findUnique({
         where: { id: Number(id) }
       })
 
-      if (!professional) return res.json({ error: "Não foram encontrados profissionais com esse ID!" })
+      if (!paciente) return res.json({ error: "Não foram encontrados pacientes com esse ID!" })
 
-      professional = await prisma.profissional.update(
+      patient = await prisma.paciente.update(
         {
           where: { id: Number(id) },
-          data: { nome, cargo, clinicaId }
+          data: { nome, cpf, data_de_nascimento, telefone, sexo, clinicaId }
         })
 
-      return res.json(professional);
+      return res.json(patient);
     } catch (error) {
       res.json({ error })
     }
   },
 
-  async deleteProfessional(req, res) {
+  async deletePatient(req, res) {
     try {
       const { id } = req.params
 
-      const professional = await prisma.profissional.findUnique({
+      const patient = await prisma.paciente.findUnique({
         where: { id: Number(id) }
       })
 
-      if (!professional) return res.json({ error: "Não foram encontrados profissionais com esse ID!" })
+      if (!patient) return res.json({ error: "Não foram encontrados pacientes com esse ID!" })
 
-      await prisma.profissional.delete({ where: { id: Number(id) } })
+      await prisma.patient.delete({ where: { id: Number(id) } })
 
-      return res.json({ message: "Profissional deletado!" })
+      return res.json({ message: "Paciente deletado!" })
 
     } catch (error) {
       return res.json({ error })

@@ -46,10 +46,10 @@ model Profissional {
 model Paciente {
   id                 Int        @id @default(autoincrement())
   nome               String
-  cpf                Int
+  cpf                String
   data_de_criacao    DateTime   @default(now())
-  data_de_nascimento Int
-  telefone           Int
+  data_de_nascimento String
+  telefone           String
   sexo               String
   clinica            Clinica    @relation(fields: [clinicaId], references: [id])
   clinicaId          Int
