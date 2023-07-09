@@ -13,6 +13,12 @@ datasource db {
 model Clinica {
   id   Int    @id @default(autoincrement())
   nome String @unique
+
+  Usuario              Usuario[]
+  Profissional         Profissional[]
+  Paciente             Paciente[]
+  Consulta             Consulta[]
+  Tipo_de_procedimento Tipo_de_procedimento[]
 }
 
 model Usuario {
@@ -22,24 +28,64 @@ model Usuario {
   data_de_criacao DateTime @default(now())
   senha           String
   admin           Role
+  clinica         Clinica  @relation(fields: [clinicaId], references: [id])
+  clinicaId       Int
 }
 
-model Medico {
-  id              Int        @id @default(autoincrement())
+model Profissional {
+  id              Int            @id @default(autoincrement())
   nome            String
-  email           String     @unique
-  data_de_criacao DateTime   @default(now())
+  data_de_criacao DateTime       @default(now())
+  cargo           String
+  clinica         Clinica        @relation(fields: [clinicaId], references: [id])
+  clinicaId       Int
   Consulta        Consulta[]
+  Procedimento    Procedimento[]
+}
+
+model Paciente {
+  id                 Int        @id @default(autoincrement())
+  nome               String
+  cpf                Int
+  data_de_criacao    DateTime   @default(now())
+  data_de_nascimento Int
+  telefone           Int
+  sexo               String
+  clinica            Clinica    @relation(fields: [clinicaId], references: [id])
+  clinicaId          Int
+  Consulta           Consulta[]
 }
 
 model Consulta {
-  id                Int      @id @default(autoincrement())
-  data_de_criacao   DateTime @default(now())
+  id                Int          @id @default(autoincrement())
+  data_de_criacao   DateTime     @default(now())
   valor_da_consulta Int
-  paciente          String
-  medico            Medico   @relation(fields: [medicoId], references: [id])
+  paciente          Paciente     @relation(fields: [pacienteId], references: [id])
+  pacienteId        Int
+  profissional      Profissional @relation(fields: [profissionalId], references: [id])
+  profissionalId    Int
+  procedimento      Procedimento @relation(fields: [procedimentoId], references: [id])
+  procedimentoId    Int
+  clinica           Clinica      @relation(fields: [clinicaId], references: [id])
+  clinicaId         Int
+}
 
-  medicoId Int
+model Tipo_de_procedimento {
+  id           Int            @id @default(autoincrement())
+  nome         String
+  clinica      Clinica        @relation(fields: [clinicaId], references: [id])
+  clinicaId    Int
+  Procedimento Procedimento[]
+}
+
+model Procedimento {
+  id                   Int                  @id @default(autoincrement())
+  nome                 String
+  tipo_de_procedimento Tipo_de_procedimento @relation(fields: [tipoId], references: [id])
+  tipoId               Int
+  profissional         Profissional         @relation(fields: [profissionalId], references: [id])
+  profissionalId       Int
+  Consulta             Consulta[]
 }
 
 enum Role {

@@ -6,6 +6,7 @@ import DoctorController from './controller/DoctorController'
 import ConsultController from './controller/ConsultController'
 import AuthController from './controller/AuthController'
 import { AuthMiddleware } from './middlewares/auth'
+import ProfessionalController from './controller/ProfessionalController'
 
 const router = Router()
 
@@ -14,10 +15,12 @@ router.get('/', (req, res) => {
 })
 
 router.route('/user')
-  .post(UserController.createUser)
-  .get(AuthMiddleware, UserController.findAllUsers);
+  .get(UserController.findAllUsers)
+// .get(AuthMiddleware, UserController.findAllUsers);
+
 
 router.route('/user/:id')
+  .post(UserController.createUser)
   .get(UserController.findUser)
   .put(UserController.updateUser)
   .delete(UserController.deleteUser);
@@ -39,6 +42,18 @@ router.route('/doctor/:id')
   .get(DoctorController.findDoctor)
   .put(DoctorController.updateDoctor)
   .delete(DoctorController.deleteDoctor);
+
+router.route('/professional')
+  .get(ProfessionalController.findAllProfessionals);
+
+router.route('/professional/:id')
+  .post(ProfessionalController.createProfessional)
+  .get(ProfessionalController.findProfessional)
+  .put(ProfessionalController.updateProfessional)
+  .delete(ProfessionalController.deleteProfessional);
+
+router.route('/professionalForName')
+  .post(ProfessionalController.findProfessionalForName);
 
 router.route('/consult/:id')
   .post(ConsultController.createConsult)

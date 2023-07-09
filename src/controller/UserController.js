@@ -7,11 +7,17 @@ export default {
   async createUser(req, res) {
 
     try {
+      const { id } = req.params
       const { nome, email, senha, admin } = req.body
       const hashPassword = await hash(senha, 8)
 
       let user = await prisma.usuario.findUnique({ where: { email } })
-      
+      const clinic = await prisma.clinica.findUnique({ where: { id: Number(id) } })
+
+      if (!clinic) {
+        return res.json({ error: 'Não existe clinica com esse id!' })
+      }
+
       if (user) {
         return res.json({ error: "Já existe usuário com esse email" })
       }
@@ -21,7 +27,10 @@ export default {
           nome,
           email,
           senha: hashPassword,
-          admin
+          admin,
+          clinicaId: clinic.id
+        }, include: {
+          clinica: true
         }
       })
 
@@ -34,7 +43,7 @@ export default {
   async findAllUsers(req, res) {
     try {
       const users = await prisma.usuario.findMany()
-      return res.json({users})
+      return res.json({ users })
 
     } catch (error) {
       return res.json({ error })
