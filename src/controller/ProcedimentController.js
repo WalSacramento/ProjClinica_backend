@@ -2,9 +2,9 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 export default {
-  async createProcedimentType(req, res) {
+  async createProcediment(req, res) {
     const { id } = req.params
-    const { nome } = req.body
+    const { nome, tipo_de_procedimento  } = req.body
 
 
     try {
@@ -14,27 +14,33 @@ export default {
         return res.json({ message: "Não foram encontradas clinincas com esse ID!" })
       }
 
-      const existingProcedimentType = await prisma.tipo_de_procedimento.findFirst({
+      const procedimentType = await prisma.tipo_de_procedimento.findUnique({ where: { id: Number(id) } })
+
+      if (!procedimentType) {
+        return res.json({ message: "Não foram encontrados tipos de procedimentos com esse ID!" })
+      }
+
+      const existingProcediment = await prisma.procedimento.findFirst({
         where: {
           nome,
-          clinicaId: clinic.id
+          tipo_de_procedimentoId : procedimentType.id
         }
       })
 
-      if (existingProcedimentType) {
+      if (existingProcediment) {
         return res.json({ error: 'Esse procedimento já existe nesta clínica' })
       }
 
-      const procedimentType = await prisma.tipo_de_procedimento.create({
+      const procediment = await prisma.procedimento.create({
         data: {
           nome,
-          clinicaId: clinic.id,
+          tipo_de_procedimentoId: procedimentType.id,
         },
         include: {
-          clinica: true,
+          tipo_de_procedimento: true
         },
       })
-      return res.json(procedimentType)
+      return res.json(procediment)
     }
     catch (error) {
       return res.json({ message: error.message })

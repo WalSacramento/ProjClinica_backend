@@ -34,14 +34,13 @@ model Usuario {
 }
 
 model Profissional {
-  id              Int            @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   nome            String
-  data_de_criacao DateTime       @default(now())
+  data_de_criacao DateTime      @default(now())
   cargo           String
-  clinica         Clinica        @relation(fields: [clinicaId], references: [id])
+  clinica         Clinica       @relation(fields: [clinicaId], references: [id])
   clinicaId       Int
   Consulta        Consulta[]
-  Procedimento    Procedimento[]
   Agendamento     Agendamento[]
 }
 
@@ -98,14 +97,12 @@ model Tipo_de_procedimento {
 }
 
 model Procedimento {
-  id                   Int                  @id @default(autoincrement())
-  nome                 String
-  tipo_de_procedimento Tipo_de_procedimento @relation(fields: [tipoId], references: [id])
-  tipoId               Int
-  profissional         Profissional         @relation(fields: [profissionalId], references: [id])
-  profissionalId       Int
-  Consulta             Consulta[]
-  Agendamento          Agendamento[]
+  id                     Int                  @id @default(autoincrement())
+  nome                   String
+  tipo_de_procedimento   Tipo_de_procedimento @relation(fields: [tipo_de_procedimentoId], references: [id])
+  tipo_de_procedimentoId Int
+  Consulta               Consulta[]
+  Agendamento            Agendamento[]
 }
 
 enum Role {

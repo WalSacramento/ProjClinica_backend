@@ -9,6 +9,7 @@ import { AuthMiddleware } from './middlewares/auth'
 import ProfessionalController from './controller/ProfessionalController'
 import PatientController from './controller/PatientController'
 import ProcedimentTypeController from './controller/ProcedimentTypeController'
+import ProcedimentController from './controller/ProcedimentController'
 
 const router = Router()
 
@@ -86,12 +87,17 @@ router.route('/consults')
 router.route('/procedimentType/:id')
   .post(ProcedimentTypeController.createProcedimentType)
   .get(ProcedimentTypeController.findProcedimentType)
+  .put(ProcedimentTypeController.updateProcedimentType)
+  .delete(ProcedimentTypeController.deleteProcedimentType);
 
 router.route('/procedimentTypes')
   .get(ProcedimentTypeController.findAllProcedimentTypes)
 
-router.route('/procedimentTypesForName')
+router.route('/procedimentTypesForName/:id')
   .post(ProcedimentTypeController.findProcedimentTypesForName)
+
+router.route('/procediment/:id')
+  .post(ProcedimentController.createProcediment)
 
 router.route('/auth')
   .post(AuthController.authenticate)
