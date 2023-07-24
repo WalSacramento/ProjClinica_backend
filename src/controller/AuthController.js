@@ -22,8 +22,13 @@ export default {
 
     const token = sign({ id: user.id }, "secret", { expiresIn: "1d" })
 
-    const { id, nome, admin, } = user
-    return res.json({ user: { id, nome, admin, email }, token })
+    const { id, nome, admin, clinicaId } = user
+    const clinica = await prisma.clinica.findUnique({ where: { id: clinicaId } })
+    return res.json({
+      user: {
+        id, nome, admin, email, clinica:clinica.nome
+      }, token
+    })
   }
 
 }
