@@ -18,8 +18,8 @@ router.get('/', (req, res) => {
 })
 
 router.route('/user')
-  .get(UserController.findAllUsers)
-// .get(AuthMiddleware, UserController.findAllUsers);
+  // .get(UserController.findAllUsers)
+  .get(AuthMiddleware, UserController.findAllUsers);
 
 
 router.route('/user/:id')

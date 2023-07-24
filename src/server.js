@@ -8,4 +8,4 @@ app.use(cors())
 app.use(express.json())
 app.use(router)
 
-app.listen(3030, () => console.log('🚀 Server listening on http://localhost:3030'))
+app.listen(3030, () => console.log('🚀 Server listening'))

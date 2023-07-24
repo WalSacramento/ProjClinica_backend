@@ -22,8 +22,8 @@ export default {
 
     const token = sign({ id: user.id }, "secret", { expiresIn: "1d" })
 
-    const { id, admin } = user
-    return res.json({ user: { id, admin, email }, token })
+    const { id, nome, admin, } = user
+    return res.json({ user: { id, nome, admin, email }, token })
   }
 
 }
