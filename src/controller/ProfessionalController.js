@@ -23,7 +23,7 @@ export default {
       })
 
       if (existingProfessional) {
-        return res.json({ error: 'Já existe um profissional com esse nome nesta clínica' })
+        return res.status(400).json({ error: 'Já existe um profissional com esse nome nesta clínica' })
       }
 
       const professional = await prisma.profissional.create({

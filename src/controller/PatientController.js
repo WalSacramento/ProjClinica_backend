@@ -12,7 +12,7 @@ export default {
       const clinic = await prisma.clinica.findUnique({ where: { id: Number(id) } })
 
       if (!clinic) {
-        return res.json({ error: 'Não existe clínica com esse id!' })
+        return res.status(400).json({ error: 'Não existe clínica com esse id!' })
       }
 
       const existingPatient = await prisma.paciente.findFirst({
@@ -23,7 +23,7 @@ export default {
       })
 
       if (existingPatient) {
-        return res.json({ error: 'Já existe um paciente com esse CPF cadastrado nesta clinica!' })
+        return res.status(400).json({ error: 'Já existe um paciente com esse CPF cadastrado nesta clinica!' }) 
       }
 
       const patient = await prisma.paciente.create({
@@ -43,7 +43,7 @@ export default {
       return res.json(patient)
     } catch (error) {
       console.error('Ocorreu um erro:', error)
-      return res.json({ error: 'Ocorreu um erro durante o processamento da solicitação' })
+      return res.status(400).json({ error: 'Ocorreu um erro durante o processamento da solicitação' })
     }
   },
 
@@ -65,7 +65,7 @@ export default {
         where: { id: Number(id) }
       })
 
-      if (!patient) return res.json({ error: "Não foram encontrados pacientes com esse ID!" })
+      if (!patient) return res.status(400).json({ error: "Não foram encontrados pacientes com esse ID!" })
 
       return res.json(patient)
 
@@ -83,7 +83,7 @@ export default {
       });
 
       if (patient.length === 0) {
-        return res.json({ error: 'Não foram encontrados pacientes com esse nome.' });
+        return res.status(400).json({ error: 'Não foram encontrados pacientes com esse nome.' });
       }
 
       return res.json(patient);
@@ -100,7 +100,7 @@ export default {
       });
 
       if (patient.length === 0) {
-        return res.json({ error: 'Não foram encontrados pacientes com essa data de nascimento.' });
+        return res.status(400).json({ error: 'Não foram encontrados pacientes com essa data de nascimento.' });
       }
 
       return res.json(patient);
@@ -117,7 +117,7 @@ export default {
       });
 
       if (patient.length === 0) {
-        return res.json({ error: 'Não foram encontrados pacientes com esse CPF.' });
+        return res.status(400).json({ error: 'Não foram encontrados pacientes com esse CPF.' });
       }
 
       return res.json(patient);
@@ -136,7 +136,7 @@ export default {
         where: { id: Number(id) }
       })
 
-      if (!paciente) return res.json({ error: "Não foram encontrados pacientes com esse ID!" })
+      if (!paciente) return res.status(400).json({ error: "Não foram encontrados pacientes com esse ID!" })
 
       patient = await prisma.paciente.update(
         {
@@ -158,7 +158,7 @@ export default {
         where: { id: Number(id) }
       })
 
-      if (!patient) return res.json({ error: "Não foram encontrados pacientes com esse ID!" })
+      if (!patient) return res.status(400).json({ error: "Não foram encontrados pacientes com esse ID!" })
 
       await prisma.patient.delete({ where: { id: Number(id) } })
 
