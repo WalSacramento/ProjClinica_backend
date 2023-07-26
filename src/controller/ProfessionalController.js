@@ -7,7 +7,7 @@ export default {
   async createProfessional(req, res) {
     try {
       const { id } = req.params
-      const { nome, cargo } = req.body
+      const { nome, especialidade } = req.body
 
       const clinic = await prisma.clinica.findUnique({ where: { id: Number(id) } })
 
@@ -29,7 +29,7 @@ export default {
       const professional = await prisma.profissional.create({
         data: {
           nome,
-          cargo,
+          cargo: especialidade,
           clinicaId: clinic.id
         },
         include: {
