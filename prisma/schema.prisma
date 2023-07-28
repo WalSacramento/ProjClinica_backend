@@ -62,6 +62,7 @@ model Consulta {
   id                Int          @id @default(autoincrement())
   data_de_criacao   DateTime     @default(now())
   valor_da_consulta Int
+  tipo_de_pagamento String
   paciente          Paciente     @relation(fields: [pacienteId], references: [id])
   pacienteId        Int
   profissional      Profissional @relation(fields: [profissionalId], references: [id])

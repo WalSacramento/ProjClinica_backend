@@ -4,30 +4,50 @@ const prisma = new PrismaClient()
 export default {
   async createConsult(req, res) {
     const { id } = req.params
-    const { valor_da_consulta, paciente } = req.body
-
+    const { valor_da_consulta, tipo_de_pagamento, pacienteId, profissionalId, procedimentoId } = req.body
 
     try {
-      const doctor = await prisma.medico.findUnique({ where: { id: Number(id) } })
+      const clinic = await prisma.clinica.findUnique({ where: { id: Number(id) } })
+      const patient = await prisma.paciente.findUnique({ where: { id: Number(pacienteId) } })
+      const professional = await prisma.profissional.findUnique({ where: { id: Number(profissionalId) } })
+      const procedimento = await prisma.procedimento.findUnique({ where: { id: Number(procedimentoId) } })
 
-      if (!doctor) {
-        return res.json({ message: "Não foram encontrados médicos com esse ID!" })
+      if (!clinic) {
+        return res.status(400).json({ message: "Não foram encontrados clínicas com esse ID!" })
+      }
+
+      else if (!patient) {
+        return res.status(400).json({ message: "Não foram encontrados pacientes com esse ID!" })
+      }
+
+      else if (!professional) {
+        return res.status(400).json({ message: "Não foram encontrados profissionais com esse ID!" })
+      }
+
+      else if (!procedimento) {
+        return res.status(400).json({ message: "Não foram encontrados procedimentos com esse ID!" })
       }
 
       const consult = await prisma.consulta.create({
         data: {
+          clinicaId: clinic.id,
+          pacienteId: patient.id,
+          profissionalId: professional.id,
+          procedimentoId: procedimento.id,
           valor_da_consulta,
-          paciente,
-          medicoId: doctor.id,
+          tipo_de_pagamento,
         },
         include: {
-          medico: true,
+          clinica: true,
+          paciente: true,
+          profissional: true,
+          procedimento: true,
         },
       })
       return res.json(consult)
     }
     catch (error) {
-      return res.json({ message: error.message })
+      return res.status(400).json({ message: error.message })
     }
   },
 
@@ -35,19 +55,142 @@ export default {
     try {
       const consults = await prisma.consulta.findMany({
         select: {
-          medico: {
+          id: true,
+          data_de_criacao: true,
+          paciente: {
+            select: {
+              nome: true,
+            }
+          },
+          procedimento: {
+            select: {
+              nome: true,
+            }
+          },
+          profissional: {
             select: {
               nome: true,
             },
           },
-          id: true,
+          clinica: {
+            select: {
+              nome: true,
+            }
+          },
           valor_da_consulta: true,
-          paciente: true,
-
+          tipo_de_pagamento: true
         }
       })
 
       return res.json(consults)
+    } catch (error) {
+      return res.json({ error })
+    }
+  },
+
+  async findConsultForPeriod(req, res) {
+    try {
+      const { data_inicial, data_final } = req.body
+
+      const transformDate = (date) => {
+        const transformedDate = `${date}T00:00:00.000Z`
+        return transformedDate
+      }
+
+      const consults = await prisma.consulta.findMany({
+        where: {
+          data_de_criacao: {
+            gte: new Date(transformDate(data_inicial)),
+            lte: new Date(transformDate(data_final))
+          }
+        },
+        select: {
+          id: true,
+          data_de_criacao: true,
+          paciente: {
+            select: {
+              nome: true,
+            }
+          },
+          procedimento: {
+            select: {
+              nome: true,
+            }
+          },
+          profissional: {
+            select: {
+              nome: true,
+            },
+          },
+          clinica: {
+            select: {
+              nome: true,
+            }
+          },
+          valor_da_consulta: true,
+          tipo_de_pagamento: true
+        }
+      })
+
+      return res.json(consults)
+    } catch (error) {
+      return res.json({ error })
+    }
+  },
+
+  async findConsultForPatient(req, res) {
+    try {
+      const { pacienteId } = req.body
+
+      const consults = await prisma.consulta.findMany({
+        where: { pacienteId: Number(pacienteId) },
+      })
+
+      if (consults.length === 0) {
+        return res.status(400).json({ error: 'Não foram encontrados consultas com esse paciente.' });
+      }
+
+      return res.json(consults)
+
+    } catch (error) {
+      return res.json({ error })
+    }
+  },
+
+  async findConsultForProfessional(req, res) {
+    try {
+      const { profissionalId } = req.body
+
+      const consults = await prisma.consulta.findMany({
+        where: { profissionalId: Number(profissionalId) },
+      })
+
+      if (consults.length === 0) {
+        return res.status(400).json({ error: 'Não foram encontrados consultas com esse profissional.' });
+      }
+
+      return res.json(consults)
+
+    } catch (error) {
+      return res.json({ error })
+    }
+
+  },
+
+  async findConsultForProcediment(req, res) {
+    try {
+      const { procedimentoId } = req.body
+
+      const consults = await prisma.consulta.findMany({
+        where: { procedimentoId: Number(procedimentoId) },
+      })
+
+      if (consults.length === 0) {
+        return res.status(400).json({ error: 'Não foram encontrados consultas com esse procedimento.' });
+      }
+
+      return res.json(consults)
+
     } catch (error) {
       return res.json({ error })
     }
@@ -71,7 +214,7 @@ export default {
         }
       })
 
-      if (!consult) return res.json({ error: "Não foram encontrados registros de consultas com esse ID!" })
+      if (!consult) return res.status(400).json({ error: "Não foram encontrados registros de consultas com esse ID!" })
 
       return res.json(consult)
 
@@ -83,40 +226,40 @@ export default {
 
   async updateConsult(req, res) {
     const { id } = req.params
-    const { valor_da_consulta, paciente, medicoId } = req.body
+    const { valor_da_consulta, tipo_de_pagamento, pacienteId, profissionalId, procedimentoId } = req.body
 
     try {
       const consult = await prisma.consulta.findUnique({ where: { id: Number(id) } })
 
       if (!consult) {
-        return res.json({ message: "Não foram encontrados registros de consultas com esse ID!" })
+        return res.status(400).json({ message: "Não foram encontrados registros de consultas com esse ID!" })
       }
 
-      await prisma.consulta.update({
+      const updatedConsult = await prisma.consulta.update({
         where: { id: Number(id) },
         data: {
           valor_da_consulta,
-          paciente,
-          medicoId,
+          tipo_de_pagamento,
+          pacienteId,
+          profissionalId,
+          procedimentoId
         }
       })
 
-      return res.json({ message: "Registro de consulta atualizado!" })
-    }
-    catch (error) {
+      return res.json(updatedConsult)
+    } catch (error) {
       return res.json({ error })
     }
-
   },
 
   async deleteConsult(req, res) {
     const { id } = req.params
 
     try {
-      const post = await prisma.consulta.findUnique({ where: { id: Number(id) } })
+      const consult = await prisma.consulta.findUnique({ where: { id: Number(id) } })
 
-      if (!post) {
-        return res.json({ message: "Não foram encontrados registros de consultas com esse ID!" })
+      if (!consult) {
+        return res.status(400).json({ message: "Não foram encontrados registros de consultas com esse ID!" })
       }
 
       await prisma.consulta.delete({ where: { id: Number(id) } })

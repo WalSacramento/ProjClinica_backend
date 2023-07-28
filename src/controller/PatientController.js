@@ -112,7 +112,7 @@ export default {
   async findPatientForCPF(req, res) {
     try {
       const { cpf } = req.body;
-      const patient = await prisma.paciente.findMany({
+      const patient = await prisma.paciente.findFirst({
         where: { cpf: { contains: cpf, mode: 'insensitive' } }
       });
 

@@ -79,7 +79,16 @@ router.route('/patientForCPF')
 router.route('/consult/:id')
   .post(ConsultController.createConsult)
   .put(ConsultController.updateConsult)
-  .get(ConsultController.findConsult);
+  .get(ConsultController.findConsultForPeriod);
+
+router.route('/consultForPatient')
+  .get(ConsultController.findConsultForPatient);
+
+router.route('/consultForProfessional')
+  .get(ConsultController.findConsultForProfessional);
+
+router.route('/consultForProcediment')
+  .get(ConsultController.findConsultForProcediment);
 
 router.route('/consults')
   .get(ConsultController.findAllConsults);
@@ -98,6 +107,15 @@ router.route('/procedimentTypesForName/:id')
 
 router.route('/procediment/:id')
   .post(ProcedimentController.createProcediment)
+  .get(ProcedimentController.findProcediment)
+  .put(ProcedimentController.updateProcediment)
+  .delete(ProcedimentController.deleteProcediment);
+
+router.route('/procediments')
+  .get(ProcedimentController.findAllProcediments)
+
+router.route('/procedimentsForName')
+  .post(ProcedimentController.findProcedimentsForName)
 
 router.route('/auth')
   .post(AuthController.authenticate)
