@@ -117,6 +117,9 @@ router.route('/procediments')
 router.route('/procedimentsForName')
   .post(ProcedimentController.findProcedimentsForName)
 
+router.route('/procedimentsForType/:id')
+  .get(ProcedimentController.findProcedimentsForType)
+
 router.route('/auth')
   .post(AuthController.authenticate)
 

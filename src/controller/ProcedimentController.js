@@ -111,6 +111,33 @@ export default {
     }
   },
 
+  async findProcedimentsForType(req, res) {
+    try {
+      const { id } = req.params;
+
+      const procedimentType = await prisma.tipo_de_procedimento.findUnique({
+        where: { id: Number(id) }
+      })
+
+      if (!procedimentType) {
+        return res.json({ error: 'Não foram encontrados tipos de procedimentos com esse ID.' });
+      }
+      
+      const procediments = await prisma.procedimento.findMany({
+        where: { tipo_de_procedimentoId: procedimentType.id }
+      })
+
+      if (procediments.length === 0) {
+        return res.json({ error: 'Não foram encontrados procedimentos com esse tipo.'});
+      }
+
+      return res.json(procediments);
+
+    } catch (error) {
+      return res.json({ error });
+    }
+  },
+
   async updateProcediment(req, res) {
     const { id } = req.params
     const { nome, tipo_de_procedimento } = req.body
