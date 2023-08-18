@@ -10,6 +10,7 @@ import ProfessionalController from './controller/ProfessionalController'
 import PatientController from './controller/PatientController'
 import ProcedimentTypeController from './controller/ProcedimentTypeController'
 import ProcedimentController from './controller/ProcedimentController'
+import SchedulingController from './controller/SchedulingController'
 
 const router = Router()
 
@@ -92,6 +93,26 @@ router.route('/consultForProcediment')
 
 router.route('/consults')
   .get(ConsultController.findAllConsults);
+
+router.route('/scheduling/:id')
+  .post(SchedulingController.createScheduling)
+  .put(SchedulingController.updateScheduling)
+  .delete(SchedulingController.deleteScheduling);
+
+router.route('/schedulings')
+  .get(SchedulingController.findAllSchedulings)
+
+router.route('/schedulingsForDate')
+  .get(SchedulingController.findSchedulingsForDate)
+
+router.route('/schedulingsForPatient')
+  .get(SchedulingController.findSchedulingsForPatient)
+
+router.route('/schedulingsForProfessional')
+  .get(SchedulingController.findSchedulingsForProfessional)
+
+router.route('/schedulingsForProcediment')
+  .get(SchedulingController.findSchedulingsForProcediment)
 
 router.route('/procedimentType/:id')
   .post(ProcedimentTypeController.createProcedimentType)
