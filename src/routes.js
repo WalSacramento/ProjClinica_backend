@@ -11,6 +11,7 @@ import PatientController from './controller/PatientController'
 import ProcedimentTypeController from './controller/ProcedimentTypeController'
 import ProcedimentController from './controller/ProcedimentController'
 import SchedulingController from './controller/SchedulingController'
+import DashboardController from './controller/DashboardController'
 
 const router = Router()
 
@@ -80,7 +81,9 @@ router.route('/patientForCPF')
 router.route('/consult/:id')
   .post(ConsultController.createConsult)
   .put(ConsultController.updateConsult)
-  .get(ConsultController.findConsultForPeriod);
+
+router.route('/consultForPeriod/:id')
+  .put(ConsultController.findConsultForPeriod);
 
 router.route('/consultForPatient')
   .get(ConsultController.findConsultForPatient);
@@ -103,7 +106,7 @@ router.route('/schedulings')
   .get(SchedulingController.findAllSchedulings)
 
 router.route('/schedulingsForDate')
-  .get(SchedulingController.findSchedulingsForDate)
+  .put(SchedulingController.findSchedulingsForDate)
 
 router.route('/schedulingsForPatient')
   .get(SchedulingController.findSchedulingsForPatient)
@@ -140,6 +143,9 @@ router.route('/procedimentsForName')
 
 router.route('/procedimentsForType/:id')
   .get(ProcedimentController.findProcedimentsForType)
+
+router.route('/dailyData/:id')
+  .put(DashboardController.dailyData)
 
 router.route('/auth')
   .post(AuthController.authenticate)

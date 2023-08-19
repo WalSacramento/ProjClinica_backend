@@ -53,7 +53,7 @@ export default {
 
   async findAllConsults(req, res) {
     try {
-      const consults = await prisma.consulta.findMany({
+      const consults = await prisma.consulta.findMany({ orderBy: { data_de_criacao: 'desc' },
         select: {
           id: true,
           data_de_criacao: true,
@@ -92,16 +92,21 @@ export default {
     try {
       const { data_inicial, data_final } = req.body
 
-      const transformDate = (date) => {
+      const transformDateInitial = (date) => {
         const transformedDate = `${date}T00:00:00.000Z`
+        return transformedDate
+      }
+
+      const transformDateFinal = (date) => {
+        const transformedDate = `${date}T23:59:59.000Z`
         return transformedDate
       }
 
       const consults = await prisma.consulta.findMany({
         where: {
           data_de_criacao: {
-            gte: new Date(transformDate(data_inicial)),
-            lte: new Date(transformDate(data_final))
+            gte: new Date(transformDateInitial(data_inicial)),
+            lte: new Date(transformDateFinal(data_final))
           }
         },
         select: {
