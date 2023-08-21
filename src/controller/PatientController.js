@@ -23,7 +23,7 @@ export default {
       })
 
       if (existingPatient) {
-        return res.status(400).json({ error: 'Já existe um paciente com esse CPF cadastrado nesta clinica!' }) 
+        return res.status(400).json({ error: 'Já existe um paciente com esse CPF cadastrado nesta clinica!' })
       }
 
       const patient = await prisma.paciente.create({
@@ -130,21 +130,21 @@ export default {
   async updatePatient(req, res) {
     try {
       const { id } = req.params
-      const { nome, cpf, data_de_nascimento, telefone, sexo } = req.body
+      const { nome, cpf, data_de_nascimento, telefone, sexo, clinicaId } = req.body
 
-      let patient = await prisma.paciente.findUnique({
+      const patient = await prisma.paciente.findUnique({
         where: { id: Number(id) }
       })
 
       if (!patient) return res.status(400).json({ error: "Não foram encontrados pacientes com esse ID!" })
 
-      patient = await prisma.paciente.update(
+      const updatedPatient = await prisma.paciente.update(
         {
           where: { id: Number(id) },
           data: { nome, cpf, data_de_nascimento, telefone, sexo, clinicaId }
         })
 
-      return res.json(patient);
+      return res.json(updatedPatient);
     } catch (error) {
       res.json({ error })
     }
