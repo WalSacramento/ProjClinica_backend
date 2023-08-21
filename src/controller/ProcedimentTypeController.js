@@ -98,7 +98,7 @@ export default {
         where: { nome: { contains: nome, mode: 'insensitive' } },
       });
 
-      if (tipo_de_procedimento.length === 0) {
+      if (procedimentType.length === 0) {
         return res.json({ error: 'Não foram encontrados tipos de procedimento com esse nome.' });
       }
 
@@ -126,7 +126,7 @@ export default {
         }
       })
 
-      return res.json({ message: "Tipo de procedimento atualizado!" })
+      return res.json({ message: "Tipo de procedimento atualizado!", procedimentType })
     }
     catch (error) {
       return res.json({ error })
