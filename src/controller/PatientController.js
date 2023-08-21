@@ -136,7 +136,7 @@ export default {
         where: { id: Number(id) }
       })
 
-      if (!paciente) return res.status(400).json({ error: "Não foram encontrados pacientes com esse ID!" })
+      if (!patient) return res.status(400).json({ error: "Não foram encontrados pacientes com esse ID!" })
 
       patient = await prisma.paciente.update(
         {
