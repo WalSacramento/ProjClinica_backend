@@ -85,7 +85,7 @@ router.route('/consult/:id')
 router.route('/consultForPeriod/:id')
   .put(ConsultController.findConsultForPeriod);
 
-router.route('/consultForPatient')
+router.route('/consultsForPatient/:pacienteId')
   .get(ConsultController.findConsultForPatient);
 
 router.route('/consultForProfessional')

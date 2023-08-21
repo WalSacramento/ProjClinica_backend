@@ -53,7 +53,8 @@ export default {
 
   async findAllConsults(req, res) {
     try {
-      const consults = await prisma.consulta.findMany({ orderBy: { data_de_criacao: 'desc' },
+      const consults = await prisma.consulta.findMany({
+        orderBy: { data_de_criacao: 'desc' },
         select: {
           id: true,
           data_de_criacao: true,
@@ -145,10 +146,40 @@ export default {
 
   async findConsultForPatient(req, res) {
     try {
-      const { pacienteId } = req.body
+      const { pacienteId } = req.params
 
       const consults = await prisma.consulta.findMany({
         where: { pacienteId: Number(pacienteId) },
+        select: {
+          id: true,
+          data_de_criacao: true,
+          valor_da_consulta: true,
+          tipo_de_pagamento: true,
+          paciente: {
+            select: {
+              nome: true,
+            },
+          },
+          procedimento: {
+            select: {
+              id: true,
+              nome: true,
+            },
+          },
+          profissional: {
+            select: {
+              id: true,
+              nome: true,
+            },
+          },
+          clinica: {
+            select: {
+              id: true,
+              nome: true,
+            }
+          },
+        },
+
       })
 
       if (consults.length === 0) {
