@@ -122,7 +122,6 @@ export default {
       if (!procedimentType) {
         return res.json({ error: 'Não foram encontrados tipos de procedimentos com esse ID.' });
       }
-      
       const procediments = await prisma.procedimento.findMany({
         where: { tipo_de_procedimentoId: procedimentType.id }
       })
