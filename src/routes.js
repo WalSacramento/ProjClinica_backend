@@ -147,6 +147,12 @@ router.route('/procedimentsForType/:id')
 router.route('/dailyData/:id')
   .put(DashboardController.dailyData)
 
+router.route('/monthlyData/:id')
+  .put(DashboardController.monthlyData)
+
+router.route('/dataForPeriod/:id')
+  .put(DashboardController.dataForPeriod)
+
 router.route('/auth')
   .post(AuthController.authenticate)
 
