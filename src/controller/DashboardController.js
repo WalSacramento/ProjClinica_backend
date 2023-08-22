@@ -77,11 +77,11 @@ export default {
       })
 
       const dailyData = {
-        Dia: data,
-        Clinica: clinic.nome,
-        Total_de_consultas: numberOfConsults,
-        Valor_total: totalValue,
-        Valor_por_profissional: valueForProfissional
+        dia: data,
+        clinica: clinic.nome,
+        total_de_consultas: numberOfConsults,
+        valor_total: totalValue,
+        valor_por_profissional: valueForProfissional
       }
 
       return res.json(dailyData)
@@ -167,11 +167,11 @@ export default {
       })
 
       const monthlyData = {
-        Mes: data,
-        Clinica: clinic.nome,
-        Total_de_consultas: numberOfConsults,
-        Valor_total: totalValue,
-        Valor_por_profissional: valueForProfissional
+        mes: data,
+        clinica: clinic.nome,
+        total_de_consultas: numberOfConsults,
+        valor_total: totalValue,
+        valor_por_profissional: valueForProfissional
       }
 
       return res.json(monthlyData)
@@ -258,11 +258,11 @@ export default {
       })
 
       const data = {
-        Periodo: `${data_inicial} a ${data_final}`,
-        Clinica: clinic.nome,
-        Total_de_consultas: numberOfConsults,
-        Valor_total: totalValue,
-        Valor_por_profissional: valueForProfissional
+        periodo: `${data_inicial} a ${data_final}`,
+        clinica: clinic.nome,
+        total_de_consultas: numberOfConsults,
+        valor_total: totalValue,
+        valor_por_profissional: valueForProfissional
       }
 
       return res.json(data)
