@@ -150,6 +150,9 @@ router.route('/dailyData/:id')
 router.route('/monthlyData/:id')
   .put(DashboardController.monthlyData)
 
+router.route('/monthlyDataforDay/:id')
+  .put(DashboardController.monthlyDataforDay)
+
 router.route('/dataForPeriod/:id')
   .put(DashboardController.dataForPeriod)
 
