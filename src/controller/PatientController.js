@@ -120,7 +120,7 @@ export default {
         return res.status(400).json({ error: 'Não foram encontrados pacientes com esse CPF.' });
       }
 
-      return res.json(patient);
+      return res.json([patient]);
     } catch (error) {
       return res.json({ error });
     }
