@@ -90,6 +90,49 @@ export default {
     }
   },
 
+  async upcomingSchedulings(req, res) {
+    try {
+      const schedulings = await prisma.agendamento.findMany({
+        where: {
+          data_da_consulta: {
+            gte: new Date()
+          }
+        },
+        select: {
+          id: true,
+          data_de_criacao: true,
+          paciente: {
+            select: {
+              nome: true,
+            }
+          },
+          procedimento: {
+            select: {
+              nome: true,
+            }
+          },
+          profissional: {
+            select: {
+              nome: true,
+            },
+          },
+          clinica: {
+            select: {
+              nome: true,
+            }
+          },
+          valor_da_consulta: true,
+          data_da_consulta: true,
+          hora_da_consulta: true
+        }
+      })
+
+      return res.json(schedulings)
+    } catch (error) {
+      return res.json({ error })
+    }
+  },
+
   async findSchedulingsForDate(req, res) {
     try {
       const { data } = req.body

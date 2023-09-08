@@ -105,6 +105,9 @@ router.route('/scheduling/:id')
 router.route('/schedulings')
   .get(SchedulingController.findAllSchedulings)
 
+router.route('/upcomingSchedulings')
+  .get(SchedulingController.upcomingSchedulings)
+
 router.route('/schedulingsForDate')
   .put(SchedulingController.findSchedulingsForDate)
 
