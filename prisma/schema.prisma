@@ -79,6 +79,7 @@ model Agendamento {
   data_da_consulta  String
   hora_da_consulta  String
   valor_da_consulta Int
+  tipo_de_pagamento String       @default("Dinheiro")
   confirmado        Boolean      @default(false)
   paciente          Paciente     @relation(fields: [pacienteId], references: [id])
   pacienteId        Int

@@ -120,6 +120,9 @@ router.route('/schedulingsForProfessional')
 router.route('/schedulingsForProcediment')
   .get(SchedulingController.findSchedulingsForProcediment)
 
+router.route('/confirmScheduling/:id')
+  .put(SchedulingController.confirmScheduling)
+
 router.route('/procedimentType/:id')
   .post(ProcedimentTypeController.createProcedimentType)
   .get(ProcedimentTypeController.findProcedimentType)

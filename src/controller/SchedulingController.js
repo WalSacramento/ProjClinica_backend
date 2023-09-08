@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 export default {
   async createScheduling(req, res) {
     const { id } = req.params
-    const { data_da_consulta, hora_da_consulta, valor_da_consulta, pacienteId, profissionalId, procedimentoId } = req.body
+    const { data_da_consulta, hora_da_consulta, valor_da_consulta, tipo_de_pagamento, pacienteId, profissionalId, procedimentoId } = req.body
 
     try {
       const clinic = await prisma.clinica.findUnique({ where: { id: Number(id) } })
@@ -35,7 +35,8 @@ export default {
           profissionalId: professional.id,
           procedimentoId: procedimento.id,
           valor_da_consulta,
-          data_da_consulta, 
+          tipo_de_pagamento,
+          data_da_consulta,
           hora_da_consulta,
         },
         include: {
@@ -79,6 +80,7 @@ export default {
             }
           },
           valor_da_consulta: true,
+          tipo_de_pagamento: true,
           data_da_consulta: true,
           hora_da_consulta: true
         }
@@ -96,32 +98,40 @@ export default {
         where: {
           data_da_consulta: {
             gte: new Date()
+          }, confirmado: {
+            equals: false
           }
         },
         select: {
           id: true,
           data_de_criacao: true,
+          confirmado: true,
           paciente: {
             select: {
+              id: true,
               nome: true,
             }
           },
           procedimento: {
             select: {
+              id: true,
               nome: true,
             }
           },
           profissional: {
             select: {
+              id: true,
               nome: true,
             },
           },
           clinica: {
             select: {
+              id: true,
               nome: true,
             }
           },
           valor_da_consulta: true,
+          tipo_de_pagamento: true,
           data_da_consulta: true,
           hora_da_consulta: true
         }
@@ -172,6 +182,7 @@ export default {
             }
           },
           valor_da_consulta: true,
+          tipo_de_pagamento: true,
           data_da_consulta: true,
           hora_da_consulta: true
         }
@@ -243,7 +254,7 @@ export default {
 
   async updateScheduling(req, res) {
     const { id } = req.params
-    const {  data_da_consulta, hora_da_consulta, valor_da_consulta, pacienteId, profissionalId, procedimentoId } = req.body
+    const { data_da_consulta, hora_da_consulta, valor_da_consulta, pacienteId, profissionalId, procedimentoId } = req.body
 
     try {
       const scheduling = await prisma.agendamento.findUnique({ where: { id: Number(id) } })
@@ -256,11 +267,34 @@ export default {
         where: { id: Number(id) },
         data: {
           valor_da_consulta,
-          data_da_consulta, 
+          data_da_consulta,
           hora_da_consulta,
           pacienteId,
           profissionalId,
           procedimentoId
+        }
+      })
+
+      return res.json(updatedScheduling)
+    } catch (error) {
+      return res.json({ error })
+    }
+  },
+
+  async confirmScheduling(req, res) {
+    const { id } = req.params
+
+    try {
+      const scheduling = await prisma.agendamento.findUnique({ where: { id: Number(id) } })
+
+      if (!scheduling) {
+        return res.status(400).json({ message: "Não foram encontrados registros de agendamentos com esse ID!" })
+      }
+
+      const updatedScheduling = await prisma.agendamento.update({
+        where: { id: Number(id) },
+        data: {
+          confirmado: true,
         }
       })
 
