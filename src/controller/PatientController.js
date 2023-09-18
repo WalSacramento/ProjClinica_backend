@@ -49,7 +49,7 @@ export default {
 
   async findAllPatients(req, res) {
     try {
-      const patients = await prisma.profissional.findMany()
+      const patients = await prisma.paciente.findMany()
       return res.json(patients)
 
     } catch (error) {
