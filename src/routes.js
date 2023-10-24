@@ -20,147 +20,146 @@ router.get('/', (req, res) => {
 })
 
 router.route('/user')
-  // .get(UserController.findAllUsers)
   .get(AuthMiddleware, UserController.findAllUsers);
 
 
 router.route('/user/:id')
-  .post(UserController.createUser)
-  .get(UserController.findUser)
-  .put(UserController.updateUser)
-  .delete(UserController.deleteUser);
+  .post(AuthMiddleware, UserController.createUser)
+  .get(AuthMiddleware, UserController.findUser)
+  .put(AuthMiddleware, UserController.updateUser)
+  .delete(AuthMiddleware, UserController.deleteUser);
 
 router.route('/clinic')
-  .post(ClinicController.createClinic)
-  .get(ClinicController.findAllClinics);
+  .post(AuthMiddleware, ClinicController.createClinic)
+  .get(AuthMiddleware, ClinicController.findAllClinics);
 
 router.route('/clinic/:id')
-  .get(ClinicController.findClinic)
-  .put(ClinicController.updateClinic)
-  .delete(ClinicController.deleteClinic);
+  .get(AuthMiddleware, ClinicController.findClinic)
+  .put(AuthMiddleware, ClinicController.updateClinic)
+  .delete(AuthMiddleware, ClinicController.deleteClinic);
 
 router.route('/doctor')
-  .post(DoctorController.createDoctor)
-  .get(DoctorController.findAllDoctors);
+  .post(AuthMiddleware, DoctorController.createDoctor)
+  .get(AuthMiddleware, DoctorController.findAllDoctors);
 
 router.route('/doctor/:id')
-  .get(DoctorController.findDoctor)
-  .put(DoctorController.updateDoctor)
-  .delete(DoctorController.deleteDoctor);
+  .get(AuthMiddleware, DoctorController.findDoctor)
+  .put(AuthMiddleware, DoctorController.updateDoctor)
+  .delete(AuthMiddleware, DoctorController.deleteDoctor);
 
 router.route('/professional')
-  .get(ProfessionalController.findAllProfessionals);
+  .get(AuthMiddleware, ProfessionalController.findAllProfessionals);
 
 router.route('/professional/:id')
-  .post(ProfessionalController.createProfessional)
-  .get(ProfessionalController.findProfessional)
-  .put(ProfessionalController.updateProfessional)
-  .delete(ProfessionalController.deleteProfessional);
+  .post(AuthMiddleware, ProfessionalController.createProfessional)
+  .get(AuthMiddleware, ProfessionalController.findProfessional)
+  .put(AuthMiddleware, ProfessionalController.updateProfessional)
+  .delete(AuthMiddleware, ProfessionalController.deleteProfessional);
 
 router.route('/professionalForName')
-  .post(ProfessionalController.findProfessionalForName);
+  .post(AuthMiddleware, ProfessionalController.findProfessionalForName);
 
 router.route('/patients')
-  .get(PatientController.findAllPatients);
+  .get(AuthMiddleware, PatientController.findAllPatients);
 
 router.route('/patient/:id')
-  .post(PatientController.createPatient)
-  .get(PatientController.findPatient)
-  .put(PatientController.updatePatient)
-  .delete(PatientController.deletePatient);
+  .post(AuthMiddleware, PatientController.createPatient)
+  .get(AuthMiddleware, PatientController.findPatient)
+  .put(AuthMiddleware, PatientController.updatePatient)
+  .delete(AuthMiddleware, PatientController.deletePatient);
 
 router.route('/patientForName')
-  .post(PatientController.findPatientForName);
+  .post(AuthMiddleware, PatientController.findPatientForName);
 
 router.route('/patientForDateOfBirth')
-  .post(PatientController.findPatientForDateOfBirth);
+  .post(AuthMiddleware, PatientController.findPatientForDateOfBirth);
 
 router.route('/patientForCPF')
-  .post(PatientController.findPatientForCPF);
+  .post(AuthMiddleware, PatientController.findPatientForCPF);
 
 router.route('/consult/:id')
-  .post(ConsultController.createConsult)
-  .put(ConsultController.updateConsult)
+  .post(AuthMiddleware, ConsultController.createConsult)
+  .put(AuthMiddleware, ConsultController.updateConsult)
 
 router.route('/consultForPeriod/:id')
-  .put(ConsultController.findConsultForPeriod);
+  .put(AuthMiddleware, ConsultController.findConsultForPeriod);
 
 router.route('/consultsForPatient/:pacienteId')
-  .get(ConsultController.findConsultForPatient);
+  .get(AuthMiddleware, ConsultController.findConsultForPatient);
 
 router.route('/consultForProfessional')
-  .get(ConsultController.findConsultForProfessional);
+  .get(AuthMiddleware, ConsultController.findConsultForProfessional);
 
 router.route('/consultForProcediment')
-  .get(ConsultController.findConsultForProcediment);
+  .get(AuthMiddleware, ConsultController.findConsultForProcediment);
 
 router.route('/consults')
-  .get(ConsultController.findAllConsults);
+  .get(AuthMiddleware, ConsultController.findAllConsults);
 
 router.route('/scheduling/:id')
-  .post(SchedulingController.createScheduling)
-  .put(SchedulingController.updateScheduling)
-  .delete(SchedulingController.deleteScheduling);
+  .post(AuthMiddleware, SchedulingController.createScheduling)
+  .put(AuthMiddleware, SchedulingController.updateScheduling)
+  .delete(AuthMiddleware, SchedulingController.deleteScheduling);
 
 router.route('/schedulings')
-  .get(SchedulingController.findAllSchedulings)
+  .get(AuthMiddleware, SchedulingController.findAllSchedulings)
 
 router.route('/upcomingSchedulings')
-  .get(SchedulingController.upcomingSchedulings)
+  .get(AuthMiddleware, SchedulingController.upcomingSchedulings)
 
 router.route('/schedulingsForDate')
-  .put(SchedulingController.findSchedulingsForDate)
+  .put(AuthMiddleware, SchedulingController.findSchedulingsForDate)
 
 router.route('/schedulingsForPatient')
-  .get(SchedulingController.findSchedulingsForPatient)
+  .get(AuthMiddleware, SchedulingController.findSchedulingsForPatient)
 
 router.route('/schedulingsForProfessional')
-  .get(SchedulingController.findSchedulingsForProfessional)
+  .get(AuthMiddleware, SchedulingController.findSchedulingsForProfessional)
 
 router.route('/schedulingsForProcediment')
-  .get(SchedulingController.findSchedulingsForProcediment)
+  .get(AuthMiddleware, SchedulingController.findSchedulingsForProcediment)
 
 router.route('/confirmScheduling/:id')
-  .put(SchedulingController.confirmScheduling)
+  .put(AuthMiddleware, SchedulingController.confirmScheduling)
 
 router.route('/procedimentType/:id')
-  .post(ProcedimentTypeController.createProcedimentType)
-  .get(ProcedimentTypeController.findProcedimentType)
-  .put(ProcedimentTypeController.updateProcedimentType)
-  .delete(ProcedimentTypeController.deleteProcedimentType);
+  .post(AuthMiddleware, ProcedimentTypeController.createProcedimentType)
+  .get(AuthMiddleware, ProcedimentTypeController.findProcedimentType)
+  .put(AuthMiddleware, ProcedimentTypeController.updateProcedimentType)
+  .delete(AuthMiddleware, ProcedimentTypeController.deleteProcedimentType);
 
 router.route('/procedimentTypes')
-  .get(ProcedimentTypeController.findAllProcedimentTypes)
+  .get(AuthMiddleware, ProcedimentTypeController.findAllProcedimentTypes)
 
 router.route('/procedimentTypesForName/:id')
-  .post(ProcedimentTypeController.findProcedimentTypesForName)
+  .post(AuthMiddleware, ProcedimentTypeController.findProcedimentTypesForName)
 
 router.route('/procediment/:id')
-  .post(ProcedimentController.createProcediment)
-  .get(ProcedimentController.findProcediment)
-  .put(ProcedimentController.updateProcediment)
-  .delete(ProcedimentController.deleteProcediment);
+  .post(AuthMiddleware, ProcedimentController.createProcediment)
+  .get(AuthMiddleware, ProcedimentController.findProcediment)
+  .put(AuthMiddleware, ProcedimentController.updateProcediment)
+  .delete(AuthMiddleware, ProcedimentController.deleteProcediment);
 
 router.route('/procediments')
-  .get(ProcedimentController.findAllProcediments)
+  .get(AuthMiddleware, ProcedimentController.findAllProcediments)
 
 router.route('/procedimentsForName')
-  .post(ProcedimentController.findProcedimentsForName)
+  .post(AuthMiddleware, ProcedimentController.findProcedimentsForName)
 
 router.route('/procedimentsForType/:id')
-  .get(ProcedimentController.findProcedimentsForType)
+  .get(AuthMiddleware, ProcedimentController.findProcedimentsForType)
 
 router.route('/dailyData/:id')
-  .put(DashboardController.dailyData)
+  .put(AuthMiddleware, DashboardController.dailyData)
 
 router.route('/monthlyData/:id')
-  .put(DashboardController.monthlyData)
+  .put(AuthMiddleware, DashboardController.monthlyData)
 
 router.route('/monthlyDataforDay/:id')
-  .put(DashboardController.monthlyDataforDay)
+  .put(AuthMiddleware, DashboardController.monthlyDataforDay)
 
 router.route('/dataForPeriod/:id')
-  .put(DashboardController.dataForPeriod)
+  .put(AuthMiddleware, DashboardController.dataForPeriod)
 
 router.route('/auth')
   .post(AuthController.authenticate)

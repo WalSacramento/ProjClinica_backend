@@ -26,7 +26,7 @@ export default {
     const clinica = await prisma.clinica.findUnique({ where: { id: clinicaId } })
     return res.json({
       user: {
-        id, nome, admin, email, clinica:clinica.nome, clinicaId:clinica.id
+        id, nome, admin, email, clinica: clinica.nome, clinicaId: clinica.id
       }, token
     })
   }
