@@ -24,7 +24,7 @@ router.route('/user')
 
 
 router.route('/user/:id')
-  .post(AuthMiddleware, UserController.createUser)
+  .post(UserController.createUser)
   .get(AuthMiddleware, UserController.findUser)
   .put(AuthMiddleware, UserController.updateUser)
   .delete(AuthMiddleware, UserController.deleteUser);
