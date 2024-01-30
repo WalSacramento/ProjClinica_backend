@@ -15,22 +15,17 @@ import DashboardController from './controller/DashboardController'
 
 const router = Router()
 
-router.get('/', (req, res) => {
-  return res.json({ hello: 'world' })
-})
-
 router.route('/user')
   .get(AuthMiddleware, UserController.findAllUsers);
 
-
 router.route('/user/:id')
-  .post(UserController.createUser)
+  .post(AuthMiddleware, UserController.createUser)
   .get(AuthMiddleware, UserController.findUser)
   .put(AuthMiddleware, UserController.updateUser)
   .delete(AuthMiddleware, UserController.deleteUser);
 
 router.route('/clinic')
-  .post(ClinicController.createClinic)
+  .post(AuthMiddleware, ClinicController.createClinic)
   .get(AuthMiddleware, ClinicController.findAllClinics);
 
 router.route('/clinic/:id')
