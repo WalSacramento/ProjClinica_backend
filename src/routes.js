@@ -30,7 +30,7 @@ router.route('/user/:id')
   .delete(AuthMiddleware, UserController.deleteUser);
 
 router.route('/clinic')
-  .post(AuthMiddleware, ClinicController.createClinic)
+  .post(ClinicController.createClinic)
   .get(AuthMiddleware, ClinicController.findAllClinics);
 
 router.route('/clinic/:id')
